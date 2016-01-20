@@ -16,7 +16,14 @@ import (
 // every network interface installed on the system is returned
 // separately.
 func NetIOCounters(pernic bool) ([]NetIOCountersStat, error) {
-	filename := common.HostProc("net/dev")
+	return NetIOCountersByPath(common.HostProc("net/dev"), pernic)
+}
+
+func NetIOCountersByPID(pid int, pernic bool) ([]NetIOCountersStat, error) {
+	return NetIOCountersByPath(common.HostProc(strconv.Itoa(pid), "net/dev"), pernic)
+}
+
+func NetIOCountersByPath(filename string, pernic bool) ([]NetIOCountersStat, error) {
 	lines, err := common.ReadLines(filename)
 	if err != nil {
 		return nil, err
